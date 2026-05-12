@@ -104,8 +104,8 @@
       opacity: 1;
     }
 
-    .card__emoji {
-      transform: scale(1.15);
+    .card__image {
+      transform: scale(1.04);
     }
   }
 
@@ -119,9 +119,12 @@
     transition: opacity var(--transition);
   }
 
-  &__emoji {
-    font-size: 5rem;
-    line-height: 1;
+  &__image {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 20px;
     transition: transform var(--transition);
     filter: drop-shadow(0 4px 16px var(--card-glow));
   }

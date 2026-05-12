@@ -7,7 +7,7 @@ export interface Persona {
   name: string;
   role: string;
   description: string;
-  emoji: string;
+  image: string;
   color: string;
   glow: string;
 }
@@ -22,10 +22,10 @@ export class Home {
   personas: Persona[] = [
     {
       id: 'beast',
-      name: 'Coach Beast',
+      name: 'Coach Brah',
       role: 'Powerlifting & Strength',
-      description: 'No excuses. Pure iron. Beast will push you past every limit you thought you had.',
-      emoji: '🏋️',
+      description: 'No excuses. Pure iron. Brah will push you past every limit you thought you had.',
+      image: 'CoachBrah.png',
       color: '#ff4d4d',
       glow: 'rgba(255, 77, 77, 0.4)',
     },
@@ -34,18 +34,27 @@ export class Home {
       name: 'Coach Zen',
       role: 'Mindful Fitness & Yoga',
       description: 'Balance your body and mind. Zen guides you through movement, breath, and recovery.',
-      emoji: '🧘',
+      image: 'CoachZen.png',
       color: '#6c63ff',
       glow: 'rgba(108, 99, 255, 0.4)',
     },
     {
-      id: 'spark',
-      name: 'Coach Spark',
-      role: 'HIIT & Fat Loss',
-      description: 'High energy, high results. Spark turns every session into a calorie-torching mission.',
-      emoji: '⚡',
+      id: 'runner',
+      name: 'Coach Runner',
+      role: 'Cardio & Endurance',
+      description: 'Miles over excuses. Runner keeps you moving, breathing, and crushing your goals.',
+      image: 'CoachRunner.png',
       color: '#f5a623',
       glow: 'rgba(245, 166, 35, 0.4)',
+    },
+    {
+      id: 'stacy',
+      name: 'Coach Stacy',
+      role: 'HIIT & Fat Loss',
+      description: 'High energy, high results. Stacy turns every session into a calorie-torching mission.',
+      image: 'CoachStacy.png',
+      color: '#f43f8e',
+      glow: 'rgba(244, 63, 142, 0.4)',
     },
   ];
 

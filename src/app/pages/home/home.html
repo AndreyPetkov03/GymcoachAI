@@ -14,7 +14,7 @@
           [style.--card-glow]="persona.glow"
           (click)="select(i)"
         >
-          <div class="card__emoji">{{ persona.emoji }}</div>
+          <img class="card__image" [src]="persona.image" [alt]="persona.name" />
           <div class="card__body">
             <h2 class="card__name">{{ persona.name }}</h2>
             <span class="card__role">{{ persona.role }}</span>
