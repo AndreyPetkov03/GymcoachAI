@@ -66,6 +66,24 @@ export class Home {
     this.selectedIndex.set(index);
   }
 
+  getPosition(i: number): 'active' | 'left' | 'right' | 'hidden' {
+    const len = this.personas.length;
+    const sel = this.selectedIndex();
+    if (i === sel) return 'active';
+    if (i === (sel + 1) % len) return 'left';
+    if (i === (sel - 1 + len) % len) return 'right';
+    return 'hidden';
+  }
+
+  getOrder(i: number): number {
+    switch (this.getPosition(i)) {
+      case 'left':   return 1;
+      case 'active': return 2;
+      case 'right':  return 3;
+      default:       return 0;
+    }
+  }
+
   startChat() {
     const persona = this.personas[this.selectedIndex()];
     this.router.navigate(['/chat', persona.id]);

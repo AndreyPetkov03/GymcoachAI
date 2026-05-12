@@ -10,11 +10,12 @@
         <div
           class="card"
           [ngClass]="{
-            'card--active': selectedIndex() === i,
-            'card--left':   i === selectedIndex() - 1,
-            'card--right':  i === selectedIndex() + 1,
-            'card--hidden': i < selectedIndex() - 1 || i > selectedIndex() + 1
+            'card--active': getPosition(i) === 'active',
+            'card--left':   getPosition(i) === 'left',
+            'card--right':  getPosition(i) === 'right',
+            'card--hidden': getPosition(i) === 'hidden'
           }"
+          [style.order]="getOrder(i)"
           [style.--card-color]="persona.color"
           [style.--card-glow]="persona.glow"
           (click)="select(i)"
