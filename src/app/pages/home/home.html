@@ -1,0 +1,49 @@
+<div class="home">
+  <header class="home__header">
+    <h1 class="home__title">GymCoach <span>AI</span></h1>
+    <p class="home__subtitle">Choose your coach and start training smarter.</p>
+  </header>
+
+  <section class="home__carousel">
+    <div class="cards">
+      @for (persona of personas; track persona.id; let i = $index) {
+        <div
+          class="card"
+          [ngClass]="{ 'card--active': selectedIndex() === i, 'card--left': i < selectedIndex(), 'card--right': i > selectedIndex() }"
+          [style.--card-color]="persona.color"
+          [style.--card-glow]="persona.glow"
+          (click)="select(i)"
+        >
+          <div class="card__emoji">{{ persona.emoji }}</div>
+          <div class="card__body">
+            <h2 class="card__name">{{ persona.name }}</h2>
+            <span class="card__role">{{ persona.role }}</span>
+            <p class="card__desc">{{ persona.description }}</p>
+          </div>
+          <div class="card__glow-ring"></div>
+        </div>
+      }
+    </div>
+
+    <div class="home__dots">
+      @for (persona of personas; track persona.id; let i = $index) {
+        <button
+          class="dot"
+          [ngClass]="{ 'dot--active': selectedIndex() === i }"
+          [style.--dot-color]="personas[i].color"
+          (click)="select(i)"
+        ></button>
+      }
+    </div>
+  </section>
+
+  <div class="home__cta">
+    <button class="btn-chat" (click)="startChat()">
+      <span>Chat Now</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"/>
+        <polyline points="12 5 19 12 12 19"/>
+      </svg>
+    </button>
+  </div>
+</div>
