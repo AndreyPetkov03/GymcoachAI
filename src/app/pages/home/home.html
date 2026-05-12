@@ -9,7 +9,12 @@
       @for (persona of personas; track persona.id; let i = $index) {
         <div
           class="card"
-          [ngClass]="{ 'card--active': selectedIndex() === i, 'card--left': i < selectedIndex(), 'card--right': i > selectedIndex() }"
+          [ngClass]="{
+            'card--active': selectedIndex() === i,
+            'card--left':   i === selectedIndex() - 1,
+            'card--right':  i === selectedIndex() + 1,
+            'card--hidden': i < selectedIndex() - 1 || i > selectedIndex() + 1
+          }"
           [style.--card-color]="persona.color"
           [style.--card-glow]="persona.glow"
           (click)="select(i)"
@@ -20,7 +25,6 @@
             <span class="card__role">{{ persona.role }}</span>
             <p class="card__desc">{{ persona.description }}</p>
           </div>
-          <div class="card__glow-ring"></div>
         </div>
       }
     </div>

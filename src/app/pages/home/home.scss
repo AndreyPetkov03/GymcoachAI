@@ -66,8 +66,8 @@
 
 .card {
   position: relative;
-  width: 280px;
-  min-height: 480px;
+  width: 260px;
+  min-height: 440px;
   flex-shrink: 0;
   border-radius: 32px;
   background: var(--surface);
@@ -76,7 +76,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 2.75rem 2rem 2.25rem;
+  padding: 2rem 1.75rem 2rem;
   gap: 1.25rem;
   cursor: pointer;
   overflow: hidden;
@@ -84,39 +84,38 @@
     transform var(--transition),
     box-shadow var(--transition),
     opacity var(--transition),
-    border-color var(--transition);
-  opacity: 0.45;
-  transform: scale(0.88);
+    border-color var(--transition),
+    width var(--transition),
+    min-height var(--transition);
 
-  &--left  { transform: scale(0.88) translateX(12px); }
-  &--right { transform: scale(0.88) translateX(-12px); }
+  /* default: side card */
+  opacity: 0.5;
+  transform: scale(0.82);
+
+  &--left  { transform: scale(0.82); }
+  &--right { transform: scale(0.82); }
+
+  &--hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.6);
+    width: 0;
+    min-width: 0;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+  }
 
   &--active {
     opacity: 1;
     transform: scale(1);
+    width: 300px;
+    min-height: 500px;
     border-color: var(--card-color);
     box-shadow:
       0 0 0 1px var(--card-color),
-      0 8px 48px var(--card-glow),
-      0 2px 8px rgba(0,0,0,0.5);
-
-    .card__glow-ring {
-      opacity: 1;
-    }
-
-    .card__image {
-      transform: scale(1.04);
-    }
-  }
-
-  &__glow-ring {
-    position: absolute;
-    inset: 0;
-    border-radius: 28px;
-    background: radial-gradient(ellipse at 50% 0%, var(--card-glow) 0%, transparent 70%);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity var(--transition);
+      0 12px 56px var(--card-glow),
+      0 2px 12px rgba(0,0,0,0.5);
   }
 
   &__image {
@@ -125,8 +124,11 @@
     object-fit: cover;
     object-position: top;
     border-radius: 20px;
-    transition: transform var(--transition);
-    filter: drop-shadow(0 4px 16px var(--card-glow));
+    transition: transform var(--transition), height var(--transition);
+  }
+
+  &--active &__image {
+    height: 280px;
   }
 
   &__body {
