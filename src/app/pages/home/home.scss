@@ -55,20 +55,19 @@
 
 /* ─── Cards ─────────────────────────────────── */
 .cards {
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  height: 520px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.5rem;
-  width: 100%;
-  max-width: 1100px;
-  perspective: 1400px;
 }
 
 .card {
-  position: relative;
+  position: absolute;
   width: 260px;
   min-height: 440px;
-  flex-shrink: 0;
   border-radius: 32px;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -80,42 +79,33 @@
   gap: 1.25rem;
   cursor: pointer;
   overflow: hidden;
+  /* ALL positional changes go through transform — single transition, no DOM reorder */
   transition:
-    transform var(--transition),
-    box-shadow var(--transition),
-    opacity var(--transition),
-    border-color var(--transition),
-    width var(--transition),
-    min-height var(--transition);
+    transform 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity   0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.45s cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* default: side card */
   opacity: 0.5;
-  transform: scale(0.82);
 
-  &--left  { transform: scale(0.82); }
-  &--right { transform: scale(0.82); }
+  &--side {
+    opacity: 0.5;
+  }
 
   &--hidden {
     opacity: 0;
     pointer-events: none;
-    transform: scale(0.6);
-    width: 0;
-    min-width: 0;
-    padding: 0;
-    margin: 0;
-    overflow: hidden;
   }
 
   &--active {
     opacity: 1;
-    transform: scale(1);
     width: 300px;
     min-height: 500px;
     border-color: var(--card-color);
     box-shadow:
       0 0 0 1px var(--card-color),
       0 12px 56px var(--card-glow),
-      0 2px 12px rgba(0,0,0,0.5);
+      0 2px 12px rgba(0, 0, 0, 0.5);
   }
 
   &__image {
@@ -124,7 +114,7 @@
     object-fit: cover;
     object-position: top;
     border-radius: 20px;
-    transition: transform var(--transition), height var(--transition);
+    transition: height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   &--active &__image {

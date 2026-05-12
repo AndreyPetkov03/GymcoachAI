@@ -66,6 +66,9 @@ export class Home {
     this.selectedIndex.set(index);
   }
 
+  // px distance between card centres (card width + gap)
+  private readonly STEP = 300;
+
   getPosition(i: number): 'active' | 'left' | 'right' | 'hidden' {
     const len = this.personas.length;
     const sel = this.selectedIndex();
@@ -75,12 +78,13 @@ export class Home {
     return 'hidden';
   }
 
-  getOrder(i: number): number {
-    switch (this.getPosition(i)) {
-      case 'left':   return 1;
-      case 'active': return 2;
-      case 'right':  return 3;
-      default:       return 0;
+  getTransform(i: number): string {
+    const pos = this.getPosition(i);
+    switch (pos) {
+      case 'left':   return `translateX(-${this.STEP}px) scale(0.82)`;
+      case 'active': return `translateX(0)              scale(1)`;
+      case 'right':  return `translateX(${this.STEP}px)  scale(0.82)`;
+      default:       return `translateX(0)              scale(0.5)`;
     }
   }
 

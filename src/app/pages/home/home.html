@@ -11,11 +11,10 @@
           class="card"
           [ngClass]="{
             'card--active': getPosition(i) === 'active',
-            'card--left':   getPosition(i) === 'left',
-            'card--right':  getPosition(i) === 'right',
+            'card--side':   getPosition(i) === 'left' || getPosition(i) === 'right',
             'card--hidden': getPosition(i) === 'hidden'
           }"
-          [style.order]="getOrder(i)"
+          [style.transform]="getTransform(i)"
           [style.--card-color]="persona.color"
           [style.--card-glow]="persona.glow"
           (click)="select(i)"
