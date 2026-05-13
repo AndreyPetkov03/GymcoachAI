@@ -16,6 +16,7 @@ export interface Persona {
 export interface Message {
   from: 'user' | 'coach';
   text: string;
+  isPremiumPrompt?: boolean;
 }
 
 @Component({
@@ -108,6 +109,10 @@ export class Home implements AfterViewChecked {
     this.chatOpen.set(false);
   }
 
+  openPremium() {
+    window.open('https://buy.stripe.com/test_00g00014AafW5ry6oo', '_blank');
+  }
+
   sendMessage() {
     const text = this.inputText.trim();
     if (!text || this.isLoading()) return;
@@ -128,10 +133,17 @@ export class Home implements AfterViewChecked {
       error: (err) => {
         const status = err?.status;
         let msg = "Sorry, something went wrong. Try again!";
-        if (status === 429) msg = "Rate limit reached — give it a few seconds and try again.";
+        let isPremium = false;
+        
+        if (status === 503) {
+          msg = "🔥 High demand! Our free AI is swamped right now. Upgrade to Premium for instant priority access with zero wait times.";
+          isPremium = true;
+        }
+        else if (status === 429) msg = "Rate limit reached — give it a few seconds and try again.";
         else if (status === 400) msg = "Bad request — something went wrong with the message format.";
         else if (status === 403) msg = "API key invalid or unauthorized.";
-        this.messages.update(m => [...m, { from: 'coach', text: msg }]);
+        
+        this.messages.update(m => [...m, { from: 'coach', text: msg, isPremiumPrompt: isPremium }]);
         this.isLoading.set(false);
         this.shouldScroll = true;
       }
