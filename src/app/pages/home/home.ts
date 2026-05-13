@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { NgClass } from '@angular/common';
-import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 export interface Persona {
   id: string;
@@ -12,9 +12,14 @@ export interface Persona {
   glow: string;
 }
 
+export interface Message {
+  from: 'user' | 'coach';
+  text: string;
+}
+
 @Component({
   selector: 'app-home',
-  imports: [NgClass],
+  imports: [NgClass, FormsModule],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
@@ -59,11 +64,35 @@ export class Home {
   ];
 
   selectedIndex = signal(1);
+  chatOpen      = signal(false);
+  messages      = signal<Message[]>([]);
+  inputText     = '';
 
-  constructor(private router: Router) {}
+  get activePersona(): Persona {
+    return this.personas[this.selectedIndex()];
+  }
 
   select(index: number) {
     this.selectedIndex.set(index);
+  }
+
+  startChat() {
+    this.messages.set([{
+      from: 'coach',
+      text: `Hey! I'm ${this.activePersona.name}. Ready to get to work? Tell me your goal.`
+    }]);
+    this.chatOpen.set(true);
+  }
+
+  closeChat() {
+    this.chatOpen.set(false);
+  }
+
+  sendMessage() {
+    const text = this.inputText.trim();
+    if (!text) return;
+    this.messages.update(m => [...m, { from: 'user', text }]);
+    this.inputText = '';
   }
 
   // px distance between card centres (card width + gap)
@@ -86,10 +115,5 @@ export class Home {
       case 'right':  return `translateX(${this.STEP}px)  scale(0.82)`;
       default:       return `translateX(0)              scale(0.5)`;
     }
-  }
-
-  startChat() {
-    const persona = this.personas[this.selectedIndex()];
-    this.router.navigate(['/chat', persona.id]);
   }
 }
