@@ -168,7 +168,13 @@ export class Home implements AfterViewChecked {
   }
 
   // px distance between card centres (card width + gap)
-  private readonly STEP = 300;
+  private getStep(): number {
+    if (typeof window === 'undefined') return 300;
+    const width = window.innerWidth;
+    if (width <= 480) return 200;
+    if (width <= 768) return 240;
+    return 300;
+  }
 
   getPosition(i: number): 'active' | 'left' | 'right' | 'hidden' {
     const len = this.personas.length;
@@ -181,10 +187,11 @@ export class Home implements AfterViewChecked {
 
   getTransform(i: number): string {
     const pos = this.getPosition(i);
+    const step = this.getStep();
     switch (pos) {
-      case 'left':   return `translateX(-${this.STEP}px) scale(0.82)`;
+      case 'left':   return `translateX(-${step}px) scale(0.82)`;
       case 'active': return `translateX(0)              scale(1)`;
-      case 'right':  return `translateX(${this.STEP}px)  scale(0.82)`;
+      case 'right':  return `translateX(${step}px)  scale(0.82)`;
       default:       return `translateX(0)              scale(0.5)`;
     }
   }
