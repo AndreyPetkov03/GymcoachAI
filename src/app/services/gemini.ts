@@ -24,12 +24,12 @@ export class GeminiService {
   sendMessage(personaId: string, history: ChatMessage[], userText: string): Observable<string> {
     const systemPrompt = SYSTEM_PROMPTS[personaId] ?? '';
 
-    // Inject system prompt as the first "model" message if history is empty
+    // Always inject system prompt at the start to maintain character
     const contents: ChatMessage[] = [];
     
-    if (history.length === 0 && systemPrompt) {
-      contents.push({ role: 'user', parts: [{ text: 'You are my coach. Introduce yourself briefly.' }] });
-      contents.push({ role: 'model', parts: [{ text: systemPrompt }] });
+    if (systemPrompt) {
+      contents.push({ role: 'user', parts: [{ text: `${systemPrompt}\n\nRemember: Keep ALL responses SHORT (2-4 sentences max). Stay in character.` }] });
+      contents.push({ role: 'model', parts: [{ text: 'Got it. Short and in character.' }] });
     }
     
     contents.push(...history);
