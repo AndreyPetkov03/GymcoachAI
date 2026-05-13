@@ -29,16 +29,6 @@
       }
     </div>
 
-    <div class="home__dots">
-      @for (persona of personas; track persona.id; let i = $index) {
-        <button
-          class="dot"
-          [ngClass]="{ 'dot--active': selectedIndex() === i }"
-          [style.--dot-color]="personas[i].color"
-          (click)="select(i)"
-        ></button>
-      }
-    </div>
   </section>
 
   <div class="home__cta">
