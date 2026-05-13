@@ -1,6 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { GeminiService, ChatMessage } from '../../services/gemini';
 
 export interface Persona {
   id: string;
@@ -23,7 +24,10 @@ export interface Message {
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
-export class Home {
+export class Home implements AfterViewChecked {
+  @ViewChild('messagesEl') private messagesEl!: ElementRef<HTMLElement>;
+
+  private gemini = inject(GeminiService);
   personas: Persona[] = [
     {
       id: 'beast',
@@ -67,6 +71,21 @@ export class Home {
   chatOpen      = signal(false);
   messages      = signal<Message[]>([]);
   inputText     = '';
+  isLoading     = signal(false);
+  private apiHistory: ChatMessage[] = [];
+  private shouldScroll = false;
+
+  ngAfterViewChecked() {
+    if (this.shouldScroll) {
+      this.scrollToBottom();
+      this.shouldScroll = false;
+    }
+  }
+
+  private scrollToBottom() {
+    const el = this.messagesEl?.nativeElement;
+    if (el) el.scrollTop = el.scrollHeight;
+  }
 
   get activePersona(): Persona {
     return this.personas[this.selectedIndex()];
@@ -77,11 +96,12 @@ export class Home {
   }
 
   startChat() {
-    this.messages.set([{
-      from: 'coach',
-      text: `Hey! I'm ${this.activePersona.name}. Ready to get to work? Tell me your goal.`
-    }]);
+    this.apiHistory = [];
+    const opening = `Hey! I'm ${this.activePersona.name}. Ready to get to work? Tell me your goal.`;
+    this.messages.set([{ from: 'coach', text: opening }]);
+    this.apiHistory.push({ role: 'model', parts: [{ text: opening }] });
     this.chatOpen.set(true);
+    this.shouldScroll = true;
   }
 
   closeChat() {
@@ -90,9 +110,32 @@ export class Home {
 
   sendMessage() {
     const text = this.inputText.trim();
-    if (!text) return;
+    if (!text || this.isLoading()) return;
+
     this.messages.update(m => [...m, { from: 'user', text }]);
     this.inputText = '';
+    this.isLoading.set(true);
+    this.shouldScroll = true;
+
+    this.gemini.sendMessage(this.activePersona.id, this.apiHistory, text).subscribe({
+      next: (reply) => {
+        this.apiHistory.push({ role: 'user',  parts: [{ text }] });
+        this.apiHistory.push({ role: 'model', parts: [{ text: reply }] });
+        this.messages.update(m => [...m, { from: 'coach', text: reply }]);
+        this.isLoading.set(false);
+        this.shouldScroll = true;
+      },
+      error: (err) => {
+        const status = err?.status;
+        let msg = "Sorry, something went wrong. Try again!";
+        if (status === 429) msg = "Rate limit reached — give it a few seconds and try again.";
+        else if (status === 400) msg = "Bad request — something went wrong with the message format.";
+        else if (status === 403) msg = "API key invalid or unauthorized.";
+        this.messages.update(m => [...m, { from: 'coach', text: msg }]);
+        this.isLoading.set(false);
+        this.shouldScroll = true;
+      }
+    });
   }
 
   // px distance between card centres (card width + gap)
