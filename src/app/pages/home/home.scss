@@ -240,6 +240,12 @@
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
 
+  &__avatar-wrapper {
+    position: relative;
+    width: 48px;
+    height: 48px;
+  }
+
   &__avatar {
     width: 48px;
     height: 48px;
@@ -248,6 +254,18 @@
     object-position: top;
     border: 2px solid var(--card-color);
     box-shadow: 0 0 12px var(--card-glow);
+  }
+
+  &__status {
+    position: absolute;
+    bottom: 2px;
+    right: 0;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #10b981;
+    border: 2.5px solid var(--bg);
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
   }
 
   &__info {
