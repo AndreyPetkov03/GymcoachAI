@@ -512,3 +512,216 @@
     &__desc { display: none; }
   }
 }
+/* ─── Pricing Modal ──────────────────────────────── */
+.pricing-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+
+  &--open {
+    opacity: 1;
+    pointer-events: all;
+  }
+}
+
+.pricing-content {
+  position: relative;
+  background: var(--bg);
+  border-radius: 24px;
+  padding: 3rem 2rem;
+  max-width: 1100px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.pricing-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: var(--surface-2);
+  }
+}
+
+.pricing-title {
+  font-size: 2rem;
+  font-weight: 800;
+  text-align: center;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.pricing-subtitle {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  margin-bottom: 3rem;
+}
+
+.pricing-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.pricing-card {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+
+  &--featured {
+    border-color: #fbbf24;
+    box-shadow: 0 8px 32px rgba(251, 191, 36, 0.2);
+  }
+
+  &__badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #000;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  &__name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+  }
+
+  &__price {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.25rem;
+  }
+
+  &__amount {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--text-primary);
+  }
+
+  &__period {
+    font-size: 1rem;
+    color: var(--text-secondary);
+  }
+
+  &__features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2rem 0;
+    flex: 1;
+
+    li {
+      padding: 0.75rem 0;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      border-bottom: 1px solid var(--border);
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  }
+
+  &__btn {
+    width: 100%;
+    padding: 0.9rem;
+    border-radius: 100px;
+    border: none;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+
+    &:active {
+      transform: scale(0.97);
+    }
+
+    &--free {
+      background: var(--surface-2);
+      color: var(--text-secondary);
+      cursor: default;
+
+      &:hover {
+        transform: none;
+      }
+    }
+
+    &--premium {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      color: #000;
+      box-shadow: 0 4px 16px rgba(251, 191, 36, 0.4);
+
+      &:hover {
+        box-shadow: 0 6px 24px rgba(251, 191, 36, 0.6);
+      }
+    }
+
+    &--premium-plus {
+      background: linear-gradient(135deg, #a78bfa, #6c63ff);
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(108, 99, 255, 0.4);
+
+      &:hover {
+        box-shadow: 0 6px 24px rgba(108, 99, 255, 0.6);
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .pricing-cards {
+    grid-template-columns: 1fr;
+  }
+}

@@ -109,3 +109,84 @@
     </button>
   </div>
 </div>
+
+<!-- Pricing Modal -->
+<div class="pricing-modal" [class.pricing-modal--open]="pricingOpen()" (click)="closePricing()">
+  <div class="pricing-content" (click)="$event.stopPropagation()">
+    <button class="pricing-close" (click)="closePricing()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+
+    <h2 class="pricing-title">Choose Your Plan</h2>
+    <p class="pricing-subtitle">Upgrade for priority access and premium features</p>
+
+    <div class="pricing-cards">
+      <!-- Free Plan -->
+      <div class="pricing-card">
+        <div class="pricing-card__header">
+          <h3 class="pricing-card__name">Free</h3>
+          <div class="pricing-card__price">
+            <span class="pricing-card__amount">$0</span>
+            <span class="pricing-card__period">/month</span>
+          </div>
+        </div>
+        <ul class="pricing-card__features">
+          <li>✓ Basic AI coaching</li>
+          <li>✓ All 4 coach personalities</li>
+          <li>✓ Limited daily messages</li>
+          <li>✗ Priority support</li>
+          <li>✗ Advanced analytics</li>
+        </ul>
+        <button class="pricing-card__btn pricing-card__btn--free" (click)="selectPlan('free')">
+          Current Plan
+        </button>
+      </div>
+
+      <!-- Premium Plan -->
+      <div class="pricing-card pricing-card--featured">
+        <div class="pricing-card__badge">Most Popular</div>
+        <div class="pricing-card__header">
+          <h3 class="pricing-card__name">Premium</h3>
+          <div class="pricing-card__price">
+            <span class="pricing-card__amount">$9</span>
+            <span class="pricing-card__period">/month</span>
+          </div>
+        </div>
+        <ul class="pricing-card__features">
+          <li>✓ Unlimited AI coaching</li>
+          <li>✓ All 4 coach personalities</li>
+          <li>✓ Priority server access</li>
+          <li>✓ Faster response times</li>
+          <li>✓ Workout plan export</li>
+        </ul>
+        <button class="pricing-card__btn pricing-card__btn--premium" (click)="selectPlan('premium')">
+          Upgrade Now
+        </button>
+      </div>
+
+      <!-- Premium+ Plan -->
+      <div class="pricing-card">
+        <div class="pricing-card__header">
+          <h3 class="pricing-card__name">Premium+</h3>
+          <div class="pricing-card__price">
+            <span class="pricing-card__amount">$19</span>
+            <span class="pricing-card__period">/month</span>
+          </div>
+        </div>
+        <ul class="pricing-card__features">
+          <li>✓ Everything in Premium</li>
+          <li>✓ Advanced analytics & insights</li>
+          <li>✓ Custom coach personalities</li>
+          <li>✓ Priority email support</li>
+          <li>✓ Early access to features</li>
+        </ul>
+        <button class="pricing-card__btn pricing-card__btn--premium-plus" (click)="selectPlan('premium-plus')">
+          Upgrade Now
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

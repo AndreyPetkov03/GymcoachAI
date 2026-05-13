@@ -70,6 +70,7 @@ export class Home implements AfterViewChecked {
 
   selectedIndex = signal(1);
   chatOpen      = signal(false);
+  pricingOpen   = signal(false);
   messages      = signal<Message[]>([]);
   inputText     = '';
   isLoading     = signal(false);
@@ -110,7 +111,23 @@ export class Home implements AfterViewChecked {
   }
 
   openPremium() {
-    window.open('https://buy.stripe.com/test_00g00014AafW5ry6oo', '_blank');
+    this.pricingOpen.set(true);
+  }
+
+  closePricing() {
+    this.pricingOpen.set(false);
+  }
+
+  selectPlan(plan: 'free' | 'premium' | 'premium-plus') {
+    if (plan === 'free') {
+      this.closePricing();
+      return;
+    }
+    // Redirect to payment for premium plans
+    const url = plan === 'premium' 
+      ? 'https://buy.stripe.com/test_premium'
+      : 'https://buy.stripe.com/test_premium_plus';
+    window.open(url, '_blank');
   }
 
   sendMessage() {
