@@ -172,8 +172,8 @@ export class Home implements AfterViewChecked {
     if (typeof window === 'undefined') return 300;
     const width = window.innerWidth;
     if (width <= 375) return 160;
-    if (width <= 480) return 180;
-    if (width <= 640) return 220;
+    if (width <= 480) return 140;
+    if (width <= 640) return 200;
     if (width <= 768) return 240;
     if (width <= 1024) return 280;
     return 300;
