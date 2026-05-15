@@ -2,6 +2,7 @@ import { Component, signal, inject, ViewChild, ElementRef, AfterViewChecked } fr
 import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GeminiService, ChatMessage } from '../../services/gemini';
+import { StripeService } from '../../services/stripe';
 
 export interface Persona {
   id: string;
@@ -29,6 +30,7 @@ export class Home implements AfterViewChecked {
   @ViewChild('messagesEl') private messagesEl!: ElementRef<HTMLElement>;
 
   private gemini = inject(GeminiService);
+  private stripe = inject(StripeService);
   personas: Persona[] = [
     {
       id: 'beast',
@@ -123,11 +125,13 @@ export class Home implements AfterViewChecked {
       this.closePricing();
       return;
     }
-    // Redirect to payment for premium plans
-    const url = plan === 'premium' 
-      ? 'https://buy.stripe.com/test_premium'
-      : 'https://buy.stripe.com/test_premium_plus';
-    window.open(url, '_blank');
+    
+    if (plan === 'premium') {
+      this.stripe.redirectToCheckout('premium');
+    } else {
+      // Premium+ not implemented yet
+      alert('Premium+ coming soon!');
+    }
   }
 
   sendMessage() {
