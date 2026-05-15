@@ -46,3 +46,7 @@ Thumbs.db
 # Environment files (contain secrets)
 src/environments/environment.ts
 STRIPE-IMPLEMENTATION-PLAN.md
+
+# Supabase
+.env
+supabase/.env
