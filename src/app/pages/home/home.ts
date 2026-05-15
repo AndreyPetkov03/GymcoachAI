@@ -127,7 +127,22 @@ export class Home implements AfterViewChecked {
     }
     
     if (plan === 'premium') {
-      this.stripe.redirectToCheckout('premium');
+      // Show test mode notice
+      const proceed = confirm(
+        '🎓 DEMO MODE - No Real Charges\n\n' +
+        'This is a portfolio project using Stripe TEST mode.\n' +
+        'No real money will be charged.\n\n' +
+        '💳 Test Card Info:\n' +
+        'Card: 4242 4242 4242 4242\n' +
+        'Expiry: 12/34\n' +
+        'CVC: 123\n' +
+        'ZIP: 12345\n\n' +
+        'Click OK to continue to checkout.'
+      );
+      
+      if (proceed) {
+        this.stripe.redirectToCheckout('premium');
+      }
     } else {
       // Premium+ not implemented yet
       alert('Premium+ coming soon!');
