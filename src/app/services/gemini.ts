@@ -2,58 +2,45 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, catchError, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { createClient } from '@supabase/supabase-js';
 
 export interface ChatMessage {
   role: 'user' | 'model';
   parts: { text: string }[];
 }
 
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent`;
-
-const SYSTEM_PROMPTS: Record<string, string> = {
-  beast: `You are Coach Brah, a no-nonsense powerlifting and strength coach. You speak with intensity, short punchy sentences, and occasional gym bro slang. You push people hard but you genuinely care about their gains. Never break character. Keep responses concise (1-4 sentences max).`,
-  zen: `You are Coach Zen, a mindful fitness and yoga coach. You speak calmly, with warmth and wisdom. You use breathing metaphors and mindfulness language. You guide people gently toward balance of body and mind. Never break character. Keep responses concise (1-4 sentences max).`,
-  runner: `You are Coach Runner, a cardio and endurance coach obsessed with mileage and consistency. You speak with energy and optimism, love running analogies, and always emphasise showing up every day. Never break character. Keep responses concise (1-4 sentences max).`,
-  stacy: `You are Coach Stacy, a high-energy HIIT and fat loss coach. You're enthusiastic, motivating, and slightly intense. You love calorie burn, circuit training, and hype. Never break character. Keep responses concise (1-4 sentences max).`,
-};
+const supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
 
 @Injectable({ providedIn: 'root' })
 export class GeminiService {
   constructor(private http: HttpClient) {}
 
   sendMessage(personaId: string, history: ChatMessage[], userText: string): Observable<string> {
-    const systemPrompt = SYSTEM_PROMPTS[personaId] ?? '';
-
-    // Always inject system prompt at the start to maintain character
-    const contents: ChatMessage[] = [];
-    
-    if (systemPrompt) {
-      contents.push({ role: 'user', parts: [{ text: `${systemPrompt}\n\nRemember: Keep ALL responses SHORT (2-4 sentences max). Stay in character.` }] });
-      contents.push({ role: 'model', parts: [{ text: 'Got it. Short and in character.' }] });
-    }
-    
-    contents.push(...history);
-    contents.push({ role: 'user', parts: [{ text: userText }] });
-
-    const body = { contents };
-
-    console.log('Sending to Gemini:', JSON.stringify(body, null, 2));
-
-    return this.http.post<any>(API_URL, body, {
-      headers: {
-        'X-goog-api-key': environment.geminiApiKey
-      }
-    }).pipe(
-      map(res => {
-        console.log('Gemini raw response:', res);
-        return res.candidates?.[0]?.content?.parts?.[0]?.text ?? 'No response.';
-      }),
-      catchError(err => {
-        console.error('Gemini API error:', err);
-        console.error('Error status:', err.status);
-        console.error('Error body:', err.error);
-        return throwError(() => err);
-      })
-    );
+    return new Observable(observer => {
+      // Call Supabase Edge Function instead of Gemini directly
+      supabase.functions.invoke('chat', {
+        body: {
+          personaId,
+          history: history.map(msg => ({
+            isUser: msg.role === 'user',
+            text: msg.parts[0].text
+          })),
+          userText
+        }
+      }).then(({ data, error }) => {
+        if (error) {
+          console.error('Supabase function error:', error);
+          observer.error(error);
+          return;
+        }
+        
+        console.log('Supabase response:', data);
+        observer.next(data.response || 'No response.');
+        observer.complete();
+      }).catch(err => {
+        console.error('Supabase invocation error:', err);
+        observer.error(err);
+      });
+    });
   }
 }
