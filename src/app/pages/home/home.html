@@ -247,3 +247,29 @@
     </div>
   </div>
 </div>
+
+<!-- Success Modal -->
+<div class="success-modal" [class.success-modal--open]="successOpen()">
+  <div class="success-modal__backdrop" (click)="closeSuccess()"></div>
+  <div class="success-modal__content">
+    <button class="success-modal__close" (click)="closeSuccess()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 6L6 18M6 6l12 12"/>
+      </svg>
+    </button>
+
+    <div class="success-modal__icon">✓</div>
+    <h2 class="success-modal__title">Payment Successful!</h2>
+    <p class="success-modal__subtitle">You're now a Premium member</p>
+
+    <div class="success-modal__features">
+      <div class="feature">✓ Unlimited AI messages</div>
+      <div class="feature">✓ Priority support</div>
+      <div class="feature">✓ All premium features</div>
+    </div>
+
+    <button class="success-modal__btn" (click)="closeSuccess()">
+      Start Chatting →
+    </button>
+  </div>
+</div>

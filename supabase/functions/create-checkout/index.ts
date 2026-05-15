@@ -42,8 +42,8 @@ Deno.serve(async (req) => {
         },
       ],
       mode: 'subscription',
-      success_url: `${FRONTEND_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${FRONTEND_URL}/cancel`,
+      success_url: `${FRONTEND_URL}?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${FRONTEND_URL}`,
     });
 
     return new Response(

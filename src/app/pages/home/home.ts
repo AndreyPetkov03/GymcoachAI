@@ -1,6 +1,7 @@
-import { Component, signal, inject, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
+import { Component, signal, inject, ViewChild, ElementRef, AfterViewChecked, OnInit } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GeminiService, ChatMessage } from '../../services/gemini';
 import { StripeService } from '../../services/stripe';
 
@@ -26,7 +27,7 @@ export interface Message {
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
-export class Home implements AfterViewChecked {
+export class Home implements AfterViewChecked, OnInit {
   @ViewChild('messagesEl') private messagesEl!: ElementRef<HTMLElement>;
 
   private gemini = inject(GeminiService);
@@ -74,11 +75,26 @@ export class Home implements AfterViewChecked {
   chatOpen      = signal(false);
   pricingOpen   = signal(false);
   testModeOpen  = signal(false);
+  successOpen   = signal(false);
   messages      = signal<Message[]>([]);
   inputText     = '';
   isLoading     = signal(false);
   private apiHistory: ChatMessage[] = [];
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private shouldScroll = false;
+
+  ngOnInit() {
+    // Check if redirected from Stripe success
+    this.route.queryParams.subscribe(params => {
+      if (params['session_id']) {
+        this.stripe.setPremium();
+        this.successOpen.set(true);
+        // Clean URL
+        this.router.navigate([], { queryParams: {} });
+      }
+    });
+  }
 
   ngAfterViewChecked() {
     if (this.shouldScroll) {
@@ -143,6 +159,10 @@ export class Home implements AfterViewChecked {
   proceedToCheckout() {
     this.testModeOpen.set(false);
     this.stripe.redirectToCheckout('premium');
+  }
+
+  closeSuccess() {
+    this.successOpen.set(false);
   }
 
   sendMessage() {
