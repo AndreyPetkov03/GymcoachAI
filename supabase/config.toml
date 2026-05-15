@@ -409,7 +409,7 @@ s3_secret_key = "env(S3_SECRET_KEY)"
 
 [functions.chat]
 enabled = true
-verify_jwt = true
+verify_jwt = false
 import_map = "./functions/chat/deno.json"
 # Uncomment to specify a custom file path to the entrypoint.
 # Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
@@ -420,7 +420,7 @@ entrypoint = "./functions/chat/index.ts"
 
 [functions.create-checkout]
 enabled = true
-verify_jwt = true
+verify_jwt = false
 import_map = "./functions/create-checkout/deno.json"
 # Uncomment to specify a custom file path to the entrypoint.
 # Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
@@ -431,7 +431,7 @@ entrypoint = "./functions/create-checkout/index.ts"
 
 [functions.webhook]
 enabled = true
-verify_jwt = true
+verify_jwt = false
 import_map = "./functions/webhook/deno.json"
 # Uncomment to specify a custom file path to the entrypoint.
 # Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
