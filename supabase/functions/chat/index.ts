@@ -1,7 +1,7 @@
 import "@supabase/functions-js/edge-runtime.d.ts";
 
 const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY');
-const GEMINI_MODEL = 'gemini-1.5-flash';
+const GEMINI_MODEL = 'gemini-3.1-flash-lite';
 
 const SYSTEM_PROMPTS: Record<string, string> = {
   beast: "You are The Beast, an intense and motivational fitness coach. Keep responses under 100 characters. Be direct, tough, and use powerful language.",
