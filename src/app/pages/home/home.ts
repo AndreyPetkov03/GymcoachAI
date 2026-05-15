@@ -73,6 +73,7 @@ export class Home implements AfterViewChecked {
   selectedIndex = signal(1);
   chatOpen      = signal(false);
   pricingOpen   = signal(false);
+  testModeOpen  = signal(false);
   messages      = signal<Message[]>([]);
   inputText     = '';
   isLoading     = signal(false);
@@ -127,26 +128,21 @@ export class Home implements AfterViewChecked {
     }
     
     if (plan === 'premium') {
-      // Show test mode notice
-      const proceed = confirm(
-        '🎓 DEMO MODE - No Real Charges\n\n' +
-        'This is a portfolio project using Stripe TEST mode.\n' +
-        'No real money will be charged.\n\n' +
-        '💳 Test Card Info:\n' +
-        'Card: 4242 4242 4242 4242\n' +
-        'Expiry: 12/34\n' +
-        'CVC: 123\n' +
-        'ZIP: 12345\n\n' +
-        'Click OK to continue to checkout.'
-      );
-      
-      if (proceed) {
-        this.stripe.redirectToCheckout('premium');
-      }
+      this.closePricing();
+      this.testModeOpen.set(true);
     } else {
       // Premium+ not implemented yet
       alert('Premium+ coming soon!');
     }
+  }
+
+  closeTestMode() {
+    this.testModeOpen.set(false);
+  }
+
+  proceedToCheckout() {
+    this.testModeOpen.set(false);
+    this.stripe.redirectToCheckout('premium');
   }
 
   sendMessage() {
