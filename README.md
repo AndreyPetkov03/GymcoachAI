@@ -1,59 +1,201 @@
-# GymcoachAi
+# 🏋️ GymCoach AI
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.10.
+An AI-powered fitness coaching platform that provides personalized workout guidance through intelligent chat assistants. Choose from multiple coaching personas, get real-time advice, and upgrade to premium for advanced features.
 
-## Development server
+🌐 **Live Demo:** [gymcoach.andrey-petkov.com](https://gymcoach.andrey-petkov.com)
 
-To start a local development server, run:
+## ✨ Features
 
-```bash
-ng serve
-```
+- **4 AI Coaching Personas** - Choose from Trainer, Nutritionist, Physiotherapist, or Motivator
+- **Real-time Chat** - Get instant personalized fitness advice powered by Google Gemini AI
+- **Premium Subscription** - Unlock advanced features with Stripe payments
+- **Test Mode** - Try the payment flow with test cards before real transactions
+- **Responsive Design** - Beautiful UI that works on all devices
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## 📸 Screenshots
 
-## Code scaffolding
+### Coach Selection
+![Coach Selector](public/screenshots/coachSelector.png)
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### AI Chat Interface
+![Chat](public/screenshots/chat.png)
 
-```bash
-ng generate component component-name
-```
+### Premium Pricing
+![Pricing](public/screenshots/pricing.png)
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Stripe Payment
+![Stripe Payment](public/screenshots/stripePayment.png)
 
-```bash
-ng generate --help
-```
+## 🛠️ Tech Stack
 
-## Building
+### Frontend
+- **Angular 18** - Standalone components with signals
+- **TypeScript** - Type-safe development
+- **SCSS** - Custom styling with CSS variables
+- **Vercel** - Production hosting
 
-To build the project run:
+### Backend
+- **Supabase Edge Functions** - Serverless API endpoints (Deno runtime)
+- **Google Gemini AI** - Natural language processing for coaching
+- **Stripe** - Secure payment processing
+- **Webhooks** - Real-time payment verification
+
+### Architecture
+- **API Key Security** - All secrets hidden server-side in Supabase
+- **Edge Functions** - Low-latency serverless compute
+- **localStorage** - Premium status persistence
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18+ and npm
+- Supabase CLI (installed via Homebrew)
+- Supabase account with project created
+- Stripe account with test mode enabled
+- Google Gemini API key
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/AndreyPetkov03/GymcoachAI.git
+   cd GymcoachAI
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Configure environment**
+   
+   Update `src/environments/environment.ts`:
+   ```typescript
+   export const environment = {
+     supabaseUrl: 'YOUR_SUPABASE_URL',
+     supabaseKey: 'YOUR_SUPABASE_ANON_KEY',
+     stripePublishableKey: 'YOUR_STRIPE_PUBLISHABLE_KEY'
+   };
+   ```
+
+4. **Setup Supabase Edge Functions**
+   
+   Link your Supabase project:
+   ```bash
+   supabase link --project-ref YOUR_PROJECT_REF
+   ```
+   
+   Set secrets in Supabase dashboard:
+   ```
+   GEMINI_API_KEY=your_gemini_api_key
+   STRIPE_SECRET_KEY=your_stripe_secret_key
+   STRIPE_PREMIUM_PRICE_ID=your_stripe_price_id
+   STRIPE_WEBHOOK_SECRET=your_webhook_secret
+   FRONTEND_URL=http://localhost:4200
+   ```
+   
+   Deploy Edge Functions:
+   ```bash
+   export SUPABASE_ACCESS_TOKEN=your_access_token
+   supabase functions deploy chat --no-verify-jwt
+   supabase functions deploy create-checkout --no-verify-jwt
+   supabase functions deploy webhook --no-verify-jwt
+   ```
+
+5. **Configure Stripe Webhook**
+   - Go to Stripe Dashboard → Webhooks
+   - Add endpoint: `https://YOUR_PROJECT.supabase.co/functions/v1/webhook`
+   - Select event: `checkout.session.completed`
+   - Copy webhook secret to Supabase secrets
+
+6. **Start development server**
+   ```bash
+   ng serve
+   ```
+   
+   Navigate to `http://localhost:4200/`
+
+## 🧪 Testing Payments
+
+Use Stripe's test cards in test mode:
+
+- **Card Number:** 4242 4242 4242 4242
+- **Expiry:** Any future date
+- **CVC:** Any 3 digits
+- **ZIP:** Any 5 digits
+
+## 📦 Building for Production
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Build artifacts will be in the `dist/` directory.
 
-## Running unit tests
+## 🌍 Deployment
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+### Vercel Deployment
 
-```bash
-ng test
+1. Push code to GitHub
+2. Import repository in Vercel
+3. Configure build settings (Angular preset)
+4. Deploy (no environment variables needed - they're in `environment.ts`)
+
+### Post-Deployment
+
+1. Update `FRONTEND_URL` in Supabase secrets to your production URL
+2. Redeploy `create-checkout` function:
+   ```bash
+   supabase functions deploy create-checkout --no-verify-jwt
+   ```
+
+## 📁 Project Structure
+
+```
+gymcoach-ai/
+├── src/
+│   ├── app/
+│   │   ├── pages/
+│   │   │   └── home/          # Main landing page
+│   │   └── services/
+│   │       ├── gemini.ts      # AI chat service
+│   │       └── stripe.ts      # Payment service
+│   └── environments/
+│       └── environment.ts     # Public configuration
+├── supabase/
+│   └── functions/
+│       ├── chat/              # Gemini AI proxy
+│       ├── create-checkout/   # Stripe checkout creator
+│       └── webhook/           # Payment webhook handler
+└── public/
+    └── screenshots/           # App screenshots
 ```
 
-## Running end-to-end tests
+## 🔒 Security
 
-For end-to-end (e2e) testing, run:
+- All API keys stored server-side in Supabase Edge Function secrets
+- Only public keys (Supabase anon key, Stripe publishable key) exposed in frontend
+- Webhook signature verification for payment security
+- JWT verification disabled for public Edge Functions
 
-```bash
-ng e2e
-```
+## 🤝 Contributing
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-## Additional Resources
+## 📄 License
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+This project is open source and available under the [MIT License](LICENSE).
+
+## 👤 Author
+
+**Andrey Petkov**
+- GitHub: [@AndreyPetkov03](https://github.com/AndreyPetkov03)
+- Website: [andrey-petkov.com](https://andrey-petkov.com)
+
+## 🙏 Acknowledgments
+
+- [Angular](https://angular.dev/) - Frontend framework
+- [Supabase](https://supabase.com/) - Backend platform
+- [Google Gemini](https://ai.google.dev/) - AI language model
+- [Stripe](https://stripe.com/) - Payment processing
+- [Vercel](https://vercel.com/) - Hosting platform
